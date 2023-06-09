@@ -7,6 +7,11 @@ from scrapy import signals
 
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
+from scrapy.downloadermiddlewares.retry import RetryMiddleware
+
+from EcommerceScraper.utils.custom_logging import setup_logger
+
+logger = setup_logger('middleware info logger', 'logs/scrapy/middleware.log')
 
 
 class EcommercescraperSpiderMiddleware:
@@ -106,3 +111,15 @@ class EcommercescraperDownloaderMiddleware:
 class CustomRotateUserAgentsMiddleware:
     def process_request(self, request, spider):
         request.headers['User-Agent'] = get_random_user_agent()
+
+
+class CustomRetryMiddleware(RetryMiddleware):
+
+    def _retry(self, request, reason, spider):
+        max_retry_times = request.meta.get("max_retry_times", self.max_retry_times)
+        retry_count = request.meta.get("retry_times", 0) + 1
+
+        if max_retry_times < retry_count:
+            logger.error(f"ERROR - URL: {request.url} - REASON: {reason}")
+        request.headers['User-Agent'] = get_random_user_agent()
+        return super()._retry(request, reason, spider)
