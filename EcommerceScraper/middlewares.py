@@ -11,7 +11,7 @@ from scrapy.downloadermiddlewares.retry import RetryMiddleware
 
 from EcommerceScraper.utils.custom_logging import setup_logger
 
-logger = setup_logger('middleware info logger', 'logs/scrapy/middleware.log')
+logger = setup_logger('middleware info logger', 'logs/middleware.log')
 
 
 class EcommercescraperSpiderMiddleware:
@@ -123,3 +123,11 @@ class CustomRetryMiddleware(RetryMiddleware):
             logger.error(f"ERROR - URL: {request.url} - REASON: {reason}")
         request.headers['User-Agent'] = get_random_user_agent()
         return super()._retry(request, reason, spider)
+
+
+class HandleStatusCodesMiddleware:
+    def process_response(self, request, response, spider):
+        if not str(response.status).startswith('2') and not str(response.status).startswith(
+                '3') and response.url and "/robots.txt" not in response.url:
+            logger.warning(f"Spider '{spider.name}' received {response.status} response for URL: {response.url}")
+        return response

@@ -56,6 +56,7 @@ ROBOTSTXT_OBEY = False
 DOWNLOADER_MIDDLEWARES = {
     'EcommerceScraper.middlewares.CustomRetryMiddleware': 550,
     'EcommerceScraper.middlewares.CustomRotateUserAgentsMiddleware': 510,
+    'EcommerceScraper.middlewares.HandleStatusCodesMiddleware': 543,
 }
 
 # Enable or disable extensions
