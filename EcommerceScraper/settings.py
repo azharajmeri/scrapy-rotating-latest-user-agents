@@ -57,6 +57,9 @@ DOWNLOADER_MIDDLEWARES = {
     'EcommerceScraper.middlewares.CustomRetryMiddleware': 550,
     'EcommerceScraper.middlewares.CustomRotateUserAgentsMiddleware': 510,
     'EcommerceScraper.middlewares.HandleStatusCodesMiddleware': 543,
+
+    'scrapy.downloadermiddlewares.redirect.RedirectMiddleware': None,
+    'EcommerceScraper.middlewares.CustomRedirectMiddleware': 542,
 }
 
 # Enable or disable extensions

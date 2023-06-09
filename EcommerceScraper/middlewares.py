@@ -7,6 +7,7 @@ from scrapy import signals
 
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
+from scrapy.downloadermiddlewares.redirect import RedirectMiddleware
 from scrapy.downloadermiddlewares.retry import RetryMiddleware
 
 from EcommerceScraper.utils.custom_logging import setup_logger
@@ -131,3 +132,14 @@ class HandleStatusCodesMiddleware:
                 '3') and response.url and "/robots.txt" not in response.url:
             logger.warning(f"Spider '{spider.name}' received {response.status} response for URL: {response.url}")
         return response
+
+
+class CustomRedirectMiddleware(RedirectMiddleware):
+    def __init__(self, settings):
+        super().__init__(settings)
+
+    def process_response(self, request, response, spider):
+        if response.status in [301, 302, 303]:
+            logger.info(f"Redirecting from {request.url} to {response.headers['Location']}")
+
+        return super().process_response(request, response, spider)
