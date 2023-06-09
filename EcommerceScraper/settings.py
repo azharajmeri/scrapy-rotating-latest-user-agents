@@ -12,12 +12,15 @@ BOT_NAME = "EcommerceScraper"
 SPIDER_MODULES = ["EcommerceScraper.spiders"]
 NEWSPIDER_MODULE = "EcommerceScraper.spiders"
 
+# Retry on failure
+RETRY_TIMES = 5
+RETRY_HTTP_CODES = [500, 502, 503, 504, 522, 524, 408, 429, 403]
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = "EcommerceScraper (+http://www.yourdomain.com)"
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -50,9 +53,9 @@ ROBOTSTXT_OBEY = True
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    "EcommerceScraper.middlewares.EcommercescraperDownloaderMiddleware": 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+   "EcommerceScraper.middlewares.CustomRotateUserAgentsMiddleware": 510,
+}
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html

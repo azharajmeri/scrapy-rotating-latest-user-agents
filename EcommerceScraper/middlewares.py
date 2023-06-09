@@ -2,7 +2,7 @@
 #
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-
+from latest_user_agents import get_random_user_agent
 from scrapy import signals
 
 # useful for handling different item types with a single interface
@@ -101,3 +101,8 @@ class EcommercescraperDownloaderMiddleware:
 
     def spider_opened(self, spider):
         spider.logger.info("Spider opened: %s" % spider.name)
+
+
+class CustomRotateUserAgentsMiddleware:
+    def process_request(self, request, spider):
+        request.headers['User-Agent'] = get_random_user_agent()
